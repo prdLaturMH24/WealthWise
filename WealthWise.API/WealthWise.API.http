@@ -1,0 +1,6 @@
+@WealthWise.API_HostAddress = http://localhost:5026
+
+GET {{WealthWise.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

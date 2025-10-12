@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.AppHost", "WealthWise.AppHost\WealthWise.AppHost.csproj", "{68CD321F-F5A1-48D1-88E8-A247A29CF64B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.ServiceDefaults", "WealthWise.ServiceDefaults\WealthWise.ServiceDefaults.csproj", "{603D609F-3DE5-0D1E-7402-B21548E2AFEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.API", "WealthWise.API\WealthWise.API.csproj", "{73BDF0AA-D828-F882-9818-32AF37D33F69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.Shared", "WealthWise.Shared\WealthWise.Shared.csproj", "{73BDF0AA-D828-F882-9818-32AF37D33F68}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "WealthWise.AI", "WealthWise.AI\WealthWise.AI.pyproj", "{2B21AA4C-345D-4512-8FA0-168471A7A535}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.UI", "WealthWise.UI\WealthWise.UI.csproj", "{0EC55A80-44E4-8597-D7CB-371310C0271C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68CD321F-F5A1-48D1-88E8-A247A29CF64B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68CD321F-F5A1-48D1-88E8-A247A29CF64B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68CD321F-F5A1-48D1-88E8-A247A29CF64B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68CD321F-F5A1-48D1-88E8-A247A29CF64B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{603D609F-3DE5-0D1E-7402-B21548E2AFEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{603D609F-3DE5-0D1E-7402-B21548E2AFEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{603D609F-3DE5-0D1E-7402-B21548E2AFEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{603D609F-3DE5-0D1E-7402-B21548E2AFEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73BDF0AA-D828-F882-9818-32AF37D33F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73BDF0AA-D828-F882-9818-32AF37D33F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73BDF0AA-D828-F882-9818-32AF37D33F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73BDF0AA-D828-F882-9818-32AF37D33F69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73BDF0AA-D828-F882-9818-32AF37D33F68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73BDF0AA-D828-F882-9818-32AF37D33F68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73BDF0AA-D828-F882-9818-32AF37D33F68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73BDF0AA-D828-F882-9818-32AF37D33F68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B21AA4C-345D-4512-8FA0-168471A7A535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B21AA4C-345D-4512-8FA0-168471A7A535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B21AA4C-345D-4512-8FA0-168471A7A535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B21AA4C-345D-4512-8FA0-168471A7A535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EC55A80-44E4-8597-D7CB-371310C0271C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC55A80-44E4-8597-D7CB-371310C0271C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC55A80-44E4-8597-D7CB-371310C0271C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC55A80-44E4-8597-D7CB-371310C0271C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F98DC96C-9398-4120-AAAF-19B32571A91A}
+	EndGlobalSection
+EndGlobal

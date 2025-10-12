@@ -1,0 +1,61 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:20.10.16-dind
+        options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Build .NET projects
+        run: |
+          dotnet build --configuration Release
+
+      - name: Run dotnet tests
+        run: |
+          dotnet test --configuration Release --no-build --verbosity normal
+        continue-on-error: true
+
+      - name: Build Docker images
+        run: |
+          docker build -t wealthwise-ai:ci ./WealthWise.AI
+          docker build -t wealthwise-api:ci ./WealthWise.API
+          docker build -t wealthwise-ui:ci ./WealthWise.UI
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push images
+        run: |
+          docker tag wealthwise-ai:ci ${{ secrets.DOCKERHUB_USERNAME }}/wealthwise-ai:latest
+          docker tag wealthwise-api:ci ${{ secrets.DOCKERHUB_USERNAME }}/wealthwise-api:latest
+          docker tag wealthwise-ui:ci ${{ secrets.DOCKERHUB_USERNAME }}/wealthwise-ui:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/wealthwise-ai:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/wealthwise-api:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/wealthwise-ui:latest
+
+      - name: Deploy to Azure (placeholder)
+        run: echo "Deploy steps go here - configure Azure service principal and CLI commands"
