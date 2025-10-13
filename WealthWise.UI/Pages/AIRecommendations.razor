@@ -1,0 +1,22 @@
+﻿@using FinanceDashboard.Models
+@code {
+    List<Recommendation> recommendations = new()
+    {
+        new() { Message = "Your portfolio is overweight in technology stocks. Consider diversifying into other sectors.", Priority = "High" },
+        new() { Message = "Consider investing in dividend-paying stocks for long-term growth.", Priority = "Medium" },
+        new() { Message = "Your portfolio has limited exposure to international markets. Consider adding foreign assets.", Priority = "Low" },
+    };
+}
+
+<div class="card">
+    <h3>AI Recommendations</h3>
+    <ul>
+        @foreach (var rec in recommendations)
+        {
+            <li>
+                <div class="rec-message">@rec.Message</div>
+                <div class="rec-priority">@rec.Priority</div>
+            </li>
+        }
+    </ul>
+</div>

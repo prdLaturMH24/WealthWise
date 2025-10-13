@@ -1,0 +1,25 @@
+﻿@using FinanceDashboard.Models
+@code {
+    List<MarketData> markets = new()
+    {
+        new() { IndexName = "Nifty 50", ChangePercent = 2.3M },
+        new() { IndexName = "BSE Sensex", ChangePercent = 3.1M },
+        new() { IndexName = "BSE MidCap", ChangePercent = 1.8M },
+        new() { IndexName = "Nifty IT Index", ChangePercent = 2.0M },
+        new() { IndexName = "Nifty Bank index", ChangePercent = 1.5M },
+        new() { IndexName = "BSE Small Cap", ChangePercent = 2.7M },
+    };
+}
+
+<div class="card">
+    <h3>Market Overview</h3>
+    <ul>
+        @foreach (var market in markets)
+        {
+            <li>
+                <span class="name">@market.IndexName</span>
+                <span class="percent @(market.ChangePercent >= 0 ? "positive" : "negative")">@market.ChangePercent% </span>
+            </li>
+        }
+    </ul>
+</div>

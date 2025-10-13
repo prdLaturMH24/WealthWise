@@ -1,0 +1,23 @@
+﻿@using FinanceDashboard.Models
+@code {
+    List<NewsItem> news = new()
+    {
+        new() { Title = "Fed Signals Caution on Rate Hikes Amid Inflation Concerns", Source = "economic" },
+        new() { Title = "Tech Earnings Exceed Expectations", Source = "economic" },
+        new() { Title = "Consumer Spending Rises in Q2", Source = "economic" },
+        new() { Title = "Regulatory Changes in Financial Services", Source = "economic" },
+    };
+}
+
+<div class="card">
+    <h3>Market News</h3>
+    <ul>
+        @foreach (var item in news)
+        {
+            <li>
+                <div class="news-title">@item.Title</div>
+                <div class="news-source">@item.Source</div>
+            </li>
+        }
+    </ul>
+</div>

@@ -1,0 +1,36 @@
+@page "/"
+
+<div class="dashboard-container">
+    <!-- Top summary card (PortfolioOverview contains its own card and 3 summary items) -->
+    <PortfolioOverview />
+
+    <!-- Main three-column row: Market Overview | Top Holdings | Market News -->
+    <div class="dashboard-row">
+        <div class="dashboard-col">
+            <MarketOverview />
+        </div>
+
+        <div class="dashboard-col">
+            <TopHoldings />
+        </div>
+
+        <div class="dashboard-col">
+            <MarketNews />
+        </div>
+    </div>
+
+    <!-- Secondary row: AI Recommendations aligned under the left column -->
+    <div class="dashboard-row">
+        <div class="dashboard-col">
+            <AIRecommendations />
+        </div>
+        <div class="dashboard-col"></div>
+        <div class="dashboard-col"></div>
+    </div>
+</div>
+
+@code {
+    // preserved counter sample state (not shown in UI) to avoid removing sample code
+    private int currentCount = 0;
+    private void IncrementCount() => currentCount++;
+}

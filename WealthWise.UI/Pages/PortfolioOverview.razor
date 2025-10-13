@@ -1,0 +1,123 @@
+﻿@page "/portfolio"
+@using FinanceDashboard.Models
+@using WealthWise.UI.Pages
+@inject HttpClient Http
+
+<PageTitle>Portfolio Overview</PageTitle>
+
+
+<h1>WealthWise-AI Dashboard</h1>
+
+@if (isLoading)
+{
+    <div class="card">
+        <div class="card-body">
+            <h3>Portfolio Overview</h3>
+            <p><em>Loading...</em></p>
+        </div>
+    </div>
+}
+else if (portfolio is null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h3>Portfolio Overview</h3>
+            <p class="text-danger">Portfolio data unavailable.</p>
+            <button class="btn btn-secondary" @onclick="LoadPortfolio">Retry</button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body">
+            <h3>Portfolio Overview</h3>
+            <div class="overview-grid">
+                <div class="overview-item">
+                    <div class="overview-label">Total Value</div>
+                    <div class="overview-value">@portfolio.TotalValue.ToString("C")</div>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-label">Total Return</div>
+                    <div class="overview-value">@portfolio.TotalReturn.ToString("C")</div>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-label">Risk Level</div>
+                    <div class="overview-value">@portfolio.RiskLevel</div>
+                </div>
+            </div>
+
+            @if (TryGetReturnPercent(out var pct))
+            {
+                <p class="ytd">Year-to-date: @pct.ToString("P1")</p>
+            }
+
+            <button class="btn btn-outline-primary mt-2" @onclick="LoadPortfolio">Refresh</button>
+        </div>
+    </div>
+}
+
+@code {
+    private Portfolio? portfolio;
+    private bool isLoading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPortfolio();
+    }
+
+    private async Task LoadPortfolio()
+    {
+        isLoading = true;
+        portfolio = null;
+
+        try
+        {
+            // Try API first (if you have an API endpoint, change the URL accordingly)
+            // Example: var result = await Http.GetFromJsonAsync<Portfolio>("api/portfolio");
+            // If no API exists, try loading a local sample JSON (like Weather example)
+            try
+            {
+                portfolio = await Http.GetFromJsonAsync<Portfolio>("sample-data/portfolio.json");
+            }
+            catch
+            {
+                // ignore and fall back to default below
+            }
+
+            // Fallback default if sample or API not available
+            if (portfolio is null)
+            {
+                portfolio = new Portfolio
+                {
+                    TotalValue = 125_000m,
+                    TotalReturn = 15_000m,
+                    RiskLevel = "Moderate"
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading portfolio: {ex}");
+            portfolio = null;
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private bool TryGetReturnPercent(out decimal percent)
+    {
+        percent = 0m;
+        if (portfolio == null) return false;
+
+        // Avoid dividing by zero; compute YTD % as return / (value - return)
+        var principal = portfolio.TotalValue - portfolio.TotalReturn;
+        if (principal <= 0) return false;
+
+        percent = portfolio.TotalReturn / principal;
+        return true;
+    }
+}

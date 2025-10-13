@@ -1,0 +1,25 @@
+﻿@using FinanceDashboard.Models
+@code {
+    List<Holding> holdings = new()
+    {
+        new() { Symbol = "SPY", Value = 30000 },
+        new() { Symbol = "VTI", Value = 25000 },
+        new() { Symbol = "MSFT", Value = 20000 },
+        new() { Symbol = "NVDA", Value = 15000 },
+        new() { Symbol = "TSLA", Value = 10000 },
+        new() { Symbol = "AAPL", Value = 5000 },
+    };
+}
+
+<div class="card">
+    <h3>Top Holdings</h3>
+    <ul>
+        @foreach (var holding in holdings)
+        {
+            <li>
+                <span class="name">@holding.Symbol</span>
+                <span class="value">@holding.Value.ToString("C")</span>
+            </li>
+        }
+    </ul>
+</div>
