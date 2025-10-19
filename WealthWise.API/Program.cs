@@ -66,6 +66,8 @@ public class Program
             // In non-development environments use the default handler (strict validation).
             return new HttpClientHandler();
         });
+        //Added chat service
+        builder.Services.AddScoped<AiChatService>();
 
         // Do NOT add a separate AddScoped<AiService>() - the AddHttpClient above registers the typed client.
 

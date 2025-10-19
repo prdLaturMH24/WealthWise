@@ -302,3 +302,93 @@ code {
         font-family: 'Arial', sans-serif;
         text-align: center;
     }
+
+/* AI chat styling */
+
+.chat-container {
+    max-width: 700px;
+    margin: 20px auto;
+    background: #f7f7f7;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 60vh;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chat-message {
+    display: flex;
+}
+
+    .chat-message.user {
+        justify-content: flex-end;
+    }
+
+    .chat-message.assistant {
+        justify-content: flex-start;
+    }
+
+.bubble {
+    padding: 10px 15px;
+    border-radius: 16px;
+    max-width: 70%;
+    line-height: 1.4;
+    white-space: pre-wrap;
+}
+
+.chat-message.user .bubble {
+    background-color: #2563eb;
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.chat-message.assistant .bubble {
+    background-color: #e5e7eb;
+    color: #111;
+    border-bottom-left-radius: 2px;
+}
+
+.chat-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+    .chat-input input {
+        width: 70%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .chat-input button {
+        background-color: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 16px;
+        cursor: pointer;
+    }
+
+        .chat-input button:hover {
+            background-color: #1e40af;
+        }
+
+.typing {
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
