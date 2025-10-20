@@ -1,6 +1,6 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">17.0</VisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>2b21aa4c-345d-4512-8fa0-168471a7a535</ProjectGuid>
@@ -20,7 +20,7 @@
     <InterpreterId>Global|PythonCore|3.11</InterpreterId>
     <IsWindowsApplication>False</IsWindowsApplication>
     <WebBrowserPort>8000</WebBrowserPort>
-    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <EnableNativeCodeDebugging>True</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,9 +49,6 @@
     <Compile Include="utils\validation.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\WealthWise.UI\Pages\Component.razor">
-      <Link>Component.razor</Link>
-    </Content>
     <Content Include=".env" />
     <Content Include="api\v1\__pycache__\advisor.cpython-311.pyc" />
     <Content Include="api\v1\__pycache__\auth.cpython-311.pyc" />
@@ -78,7 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.11" />
-    <InterpreterReference Include="Global|PythonCore|3.14" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="api\" />
