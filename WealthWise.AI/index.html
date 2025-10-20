@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="gradient-bg py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    AI-Powered Financial Advisory
+                </h1>
+                <p class="lead mb-4">
+                    Get personalized financial advice, sentiment analysis, and action plans 
+                    powered by FinGPT - the specialized financial large language model.
+                </p>
+                <div class="mb-4">
+                    {% if fingpt_available %}
+                    <span class="badge bg-success status-badge me-2">
+                        <i class="fas fa-check-circle me-1"></i>FinGPT Models Loaded
+                    </span>
+                    <span class="badge bg-info status-badge">
+                        <i class="fas fa-microchip me-1"></i>AI-Enhanced Responses
+                    </span>
+                    {% else %}
+                    <span class="badge bg-warning status-badge me-2">
+                        <i class="fas fa-exclamation-triangle me-1"></i>Fallback Mode Active
+                    </span>
+                    <span class="badge bg-secondary status-badge">
+                        <i class="fas fa-cogs me-1"></i>Rule-Based Responses
+                    </span>
+                    {% endif %}
+                </div>
+                <a href="/api/demo" class="btn btn-light btn-lg">
+                    <i class="fas fa-play me-2"></i>Try Demo
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <i class="fas fa-robot" style="font-size: 8rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col">
+                <h2 class="fw-bold mb-3">API Endpoints</h2>
+                <p class="text-muted">Three powerful APIs powered by FinGPT</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Financial Advice API -->
+            <div class="col-md-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h5 class="card-title">Financial Advice</h5>
+                        <p class="card-text">
+                            Generate personalized financial advice based on user profiles, 
+                            risk tolerance, and investment goals.
+                        </p>
+                        <div class="mt-auto">
+                            <span class="badge bg-primary">POST /api/financial-advice</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sentiment Analysis API -->
+            <div class="col-md-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-heart-pulse"></i>
+                        </div>
+                        <h5 class="card-title">Sentiment Analysis</h5>
+                        <p class="card-text">
+                            Analyze market sentiment for stocks with AI-powered 
+                            recommendations and confidence scores.
+                        </p>
+                        <div class="mt-auto">
+                            <span class="badge bg-success">POST /api/sentiment-recommendations</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Plan API -->
+            <div class="col-md-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h5 class="card-title">Action Plans</h5>
+                        <p class="card-text">
+                            Create detailed action plans with prioritized steps 
+                            to achieve your financial goals.
+                        </p>
+                        <div class="mt-auto">
+                            <span class="badge bg-info">POST /api/action-plan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- API Documentation -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="fw-bold mb-4">API Documentation</h2>
+
+                <!-- Financial Advice Endpoint -->
+                <div class="api-endpoint">
+                    <h5><i class="fas fa-chart-line text-primary me-2"></i>Financial Advice API</h5>
+                    <p><strong>Endpoint:</strong> <code>POST /api/financial-advice</code></p>
+                    <p><strong>Description:</strong> Generate AI-powered financial advice based on user profile</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Request Body:</h6>
+                            <div class="code-block">
+{
+  <span class="json-key">"age"</span>: <span class="json-number">30</span>,
+  <span class="json-key">"income"</span>: <span class="json-number">75000</span>,
+  <span class="json-key">"savings"</span>: <span class="json-number">50000</span>,
+  <span class="json-key">"risk_tolerance"</span>: <span class="json-string">"moderate"</span>,
+  <span class="json-key">"investment_goals"</span>: [<span class="json-string">"retirement"</span>, <span class="json-string">"house"</span>],
+  <span class="json-key">"investment_horizon"</span>: <span class="json-number">20</span>
+}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Response:</h6>
+                            <div class="code-block">
+{
+  <span class="json-key">"success"</span>: <span class="json-number">true</span>,
+  <span class="json-key">"advice"</span>: {
+    <span class="json-key">"title"</span>: <span class="json-string">"Investment Strategy"</span>,
+    <span class="json-key">"description"</span>: <span class="json-string">"Detailed advice..."</span>,
+    <span class="json-key">"action_items"</span>: [...],
+    <span class="json-key">"projected_impact"</span>: <span class="json-number">125000</span>,
+    <span class="json-key">"confidence_score"</span>: <span class="json-number">0.85</span>
+  }
+}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sentiment Analysis Endpoint -->
+                <div class="api-endpoint">
+                    <h5><i class="fas fa-heart-pulse text-success me-2"></i>Sentiment Analysis API</h5>
+                    <p><strong>Endpoint:</strong> <code>POST /api/sentiment-recommendations</code></p>
+                    <p><strong>Description:</strong> Analyze market sentiment with AI-powered recommendations</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Request Body:</h6>
+                            <div class="code-block">
+{
+  <span class="json-key">"symbols"</span>: [<span class="json-string">"AAPL"</span>, <span class="json-string">"MSFT"</span>],
+  <span class="json-key">"news_sources"</span>: [<span class="json-string">"Reuters"</span>],
+  <span class="json-key">"time_period"</span>: <span class="json-string">"1week"</span>,
+  <span class="json-key">"analysis_type"</span>: <span class="json-string">"comprehensive"</span>
+}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Response:</h6>
+                            <div class="code-block">
+{
+  <span class="json-key">"success"</span>: <span class="json-number">true</span>,
+  <span class="json-key">"recommendations"</span>: [{
+    <span class="json-key">"symbol"</span>: <span class="json-string">"AAPL"</span>,
+    <span class="json-key">"sentiment"</span>: <span class="json-string">"Positive"</span>,
+    <span class="json-key">"confidence"</span>: <span class="json-number">0.82</span>,
+    <span class="json-key">"recommendation"</span>: <span class="json-string">"Buy"</span>
+  }]
+}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Plan Endpoint -->
+                <div class="api-endpoint">
+                    <h5><i class="fas fa-tasks text-info me-2"></i>Action Plan API</h5>
+                    <p><strong>Endpoint:</strong> <code>POST /api/action-plan</code></p>
+                    <p><strong>Description:</strong> Generate detailed action plans for financial goals</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Request Body:</h6>
+                            <div class="code-block">
+{
+  <span class="json-key">"current_portfolio"</span>: {
+    <span class="json-key">"stocks"</span>: <span class="json-number">60000</span>,
+    <span class="json-key">"bonds"</span>: <span class="json-number">30000</span>
+  },
+  <span class="json-key">"financial_goals"</span>: [{
+    <span class="json-key">"name"</span>: <span class="json-string">"retirement"</span>,
+    <span class="json-key">"target_amount"</span>: <span class="json-number">1000000</span>,
+    <span class="json-key">"time_horizon"</span>: <span class="json-number">25</span>
+  }],
+  <span class="json-key">"monthly_savings"</span>: <span class="json-number">2000</span>
+}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Response:</h6>
+                            <div class="code-block">
+{
+  <span class="json-key">"success"</span>: <span class="json-number">true</span>,
+  <span class="json-key">"action_plan"</span>: {
+    <span class="json-key">"action_items"</span>: [...],
+    <span class="json-key">"estimated_timeline"</span>: <span class="json-string">"6-12 months"</span>,
+    <span class="json-key">"priority_summary"</span>: <span class="json-string">"3 high, 2 medium"</span>
+  }
+}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technology Stack -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-12 mb-5">
+                <h2 class="fw-bold">Powered by FinGPT</h2>
+                <p class="text-muted">Built on cutting-edge financial AI technology</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="mb-3">
+                    <i class="fas fa-robot feature-icon"></i>
+                </div>
+                <h5>FinGPT Models</h5>
+                <p class="text-muted">AI4Finance Foundation's specialized financial LLMs</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="mb-3">
+                    <i class="fab fa-python feature-icon"></i>
+                </div>
+                <h5>Python Flask</h5>
+                <p class="text-muted">Lightweight web framework with Visual Studio integration</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="mb-3">
+                    <i class="fas fa-database feature-icon"></i>
+                </div>
+                <h5>Real-time Data</h5>
+                <p class="text-muted">Yahoo Finance and market data integration</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="mb-3">
+                    <i class="fas fa-cloud feature-icon"></i>
+                </div>
+                <h5>Production Ready</h5>
+                <p class="text-muted">Scalable architecture with error handling</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

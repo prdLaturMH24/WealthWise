@@ -49,7 +49,6 @@ public class Program
             {
                 client.BaseAddress = new Uri(aiServiceUrl);
             }
-            client.Timeout = TimeSpan.FromSeconds(30);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
         })
         .ConfigurePrimaryHttpMessageHandler(() =>

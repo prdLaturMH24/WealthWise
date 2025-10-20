@@ -8,15 +8,19 @@
     <ProjectTypeGuids>{1b580a1a-fdb3-4b32-83e1-6407eb2722e6};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <StartupFile>
     </StartupFile>
-    <SearchPath>
-    </SearchPath>
-    <WorkingDirectory>.</WorkingDirectory>
-    <LaunchProvider>Web launcher</LaunchProvider>
+    <SearchPath>..\.venv\Scripts</SearchPath>
+    <WorkingDirectory>
+    </WorkingDirectory>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
     <WebBrowserUrl>http://localhost</WebBrowserUrl>
     <OutputPath>.</OutputPath>
     <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
     <Name>WealthWise.AI</Name>
     <RootNamespace>WealthWise.AI</RootNamespace>
+    <InterpreterId>Global|PythonCore|3.11</InterpreterId>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <WebBrowserPort>8000</WebBrowserPort>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,34 +31,69 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AdviceCategory.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="app.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FinancialAdvice.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FinancialGoal.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Investment.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InvestmentCategory.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RiskToleranceLevel.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="UserProfile.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="api\v1\advisor.py" />
+    <Compile Include="api\v1\auth.py" />
+    <Compile Include="api\v1\planner.py" />
+    <Compile Include="api\v1\recommendations.py" />
+    <Compile Include="config\settings.py" />
+    <Compile Include="main.py" />
+    <Compile Include="middleware\auth_middleware.py" />
+    <Compile Include="models\chat_completions.py" />
+    <Compile Include="models\response_models.py" />
+    <Compile Include="models\user_models.py" />
+    <Compile Include="services\fingpt_service.py" />
+    <Compile Include="services\market_data_service.py" />
+    <Compile Include="utils\logging_config.py" />
+    <Compile Include="utils\model_utils.py" />
+    <Compile Include="utils\rate_limiting.py" />
+    <Compile Include="utils\validation.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Dockerfile" />
+    <Content Include="..\WealthWise.UI\Pages\Component.razor">
+      <Link>Component.razor</Link>
+    </Content>
+    <Content Include=".env" />
+    <Content Include="api\v1\__pycache__\advisor.cpython-311.pyc" />
+    <Content Include="api\v1\__pycache__\auth.cpython-311.pyc" />
+    <Content Include="api\v1\__pycache__\planner.cpython-311.pyc" />
+    <Content Include="api\v1\__pycache__\recommendations.cpython-311.pyc" />
+    <Content Include="base.html" />
+    <Content Include="config\__pycache__\settings.cpython-311.pyc" />
+    <Content Include="demo.html" />
+    <Content Include="index.html" />
+    <Content Include="middleware\__pycache__\auth_middleware.cpython-311.pyc" />
+    <Content Include="models\__pycache__\chat_completions.cpython-311.pyc" />
+    <Content Include="models\__pycache__\response_models.cpython-311.pyc" />
+    <Content Include="models\__pycache__\user_models.cpython-311.pyc" />
+    <Content Include="PROJECT_MANIFEST.md" />
+    <Content Include="README.md" />
     <Content Include="requirements.txt" />
+    <Content Include="services\__pycache__\fingpt_service.cpython-311.pyc" />
+    <Content Include="services\__pycache__\market_data_service.cpython-311.pyc" />
+    <Content Include="utils\__pycache__\logging_config.cpython-311.pyc" />
+    <Content Include="utils\__pycache__\model_utils.cpython-311.pyc" />
+    <Content Include="utils\__pycache__\rate_limiting.cpython-311.pyc" />
+    <Content Include="utils\__pycache__\validation.cpython-311.pyc" />
+    <Content Include="WealthWise_AI.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.11" />
+    <InterpreterReference Include="Global|PythonCore|3.14" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="api\" />
+    <Folder Include="api\v1\" />
+    <Folder Include="api\v1\__pycache__\" />
+    <Folder Include="config\" />
+    <Folder Include="config\__pycache__\" />
+    <Folder Include="middleware\" />
+    <Folder Include="middleware\__pycache__\" />
+    <Folder Include="models\" />
+    <Folder Include="models\__pycache__\" />
+    <Folder Include="services\" />
+    <Folder Include="services\__pycache__\" />
+    <Folder Include="utils\" />
+    <Folder Include="utils\__pycache__\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 

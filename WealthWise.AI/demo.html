@@ -1,0 +1,413 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h1 class="fw-bold">FinGPT API Demo</h1>
+            <p class="lead text-muted">Test all three financial advisory APIs</p>
+        </div>
+    </div>
+
+    <!-- API Testing Tabs -->
+    <div class="row">
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="apiTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="advice-tab" data-bs-toggle="tab" data-bs-target="#advice" 
+                            type="button" role="tab">Financial Advice</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="sentiment-tab" data-bs-toggle="tab" data-bs-target="#sentiment" 
+                            type="button" role="tab">Sentiment Analysis</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action" 
+                            type="button" role="tab">Action Plan</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="apiTabContent">
+                <!-- Financial Advice Tab -->
+                <div class="tab-pane fade show active" id="advice" role="tabpanel">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-chart-line text-primary me-2"></i>Financial Advice Generator
+                            </h5>
+                            <form id="adviceForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="age" class="form-label">Age</label>
+                                            <input type="number" class="form-control" id="age" value="35" min="18" max="100">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="income" class="form-label">Annual Income ($)</label>
+                                            <input type="number" class="form-control" id="income" value="75000" min="0">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="savings" class="form-label">Current Savings ($)</label>
+                                            <input type="number" class="form-control" id="savings" value="50000" min="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="riskTolerance" class="form-label">Risk Tolerance</label>
+                                            <select class="form-select" id="riskTolerance">
+                                                <option value="conservative">Conservative</option>
+                                                <option value="moderate" selected>Moderate</option>
+                                                <option value="aggressive">Aggressive</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="investmentHorizon" class="form-label">Investment Horizon (years)</label>
+                                            <input type="number" class="form-control" id="investmentHorizon" value="20" min="1" max="50">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Investment Goals</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="retirement" checked>
+                                                <label class="form-check-label" for="retirement">Retirement</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="house">
+                                                <label class="form-check-label" for="house">House Purchase</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="education">
+                                                <label class="form-check-label" for="education">Education</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-magic me-2"></i>Generate Advice
+                                </button>
+                            </form>
+                            <div id="adviceResult" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sentiment Analysis Tab -->
+                <div class="tab-pane fade" id="sentiment" role="tabpanel">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-heart-pulse text-success me-2"></i>Market Sentiment Analysis
+                            </h5>
+                            <form id="sentimentForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="symbols" class="form-label">Stock Symbols (comma-separated)</label>
+                                            <input type="text" class="form-control" id="symbols" 
+                                                   value="AAPL,MSFT,GOOGL" placeholder="AAPL,MSFT,TSLA">
+                                            <div class="form-text">Enter up to 5 stock symbols</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="timePeriod" class="form-label">Time Period</label>
+                                            <select class="form-select" id="timePeriod">
+                                                <option value="1week" selected>1 Week</option>
+                                                <option value="1month">1 Month</option>
+                                                <option value="3months">3 Months</option>
+                                                <option value="6months">6 Months</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="newsSources" class="form-label">News Sources</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="reuters" checked>
+                                                <label class="form-check-label" for="reuters">Reuters</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="bloomberg">
+                                                <label class="form-check-label" for="bloomberg">Bloomberg</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="yahoo">
+                                                <label class="form-check-label" for="yahoo">Yahoo Finance</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="analysisType" class="form-label">Analysis Type</label>
+                                            <select class="form-select" id="analysisType">
+                                                <option value="basic">Basic</option>
+                                                <option value="comprehensive" selected>Comprehensive</option>
+                                                <option value="detailed">Detailed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-search me-2"></i>Analyze Sentiment
+                                </button>
+                            </form>
+                            <div id="sentimentResult" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Plan Tab -->
+                <div class="tab-pane fade" id="action" role="tabpanel">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-tasks text-info me-2"></i>Financial Action Plan
+                            </h5>
+                            <form id="actionForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Current Portfolio</h6>
+                                        <div class="mb-3">
+                                            <label for="stocks" class="form-label">Stocks ($)</label>
+                                            <input type="number" class="form-control" id="stocks" value="60000" min="0">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="bonds" class="form-label">Bonds ($)</label>
+                                            <input type="number" class="form-control" id="bonds" value="30000" min="0">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="cash" class="form-label">Cash ($)</label>
+                                            <input type="number" class="form-control" id="cash" value="10000" min="0">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="monthlySavings" class="form-label">Monthly Savings ($)</label>
+                                            <input type="number" class="form-control" id="monthlySavings" value="2000" min="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Financial Goals</h6>
+                                        <div class="mb-3">
+                                            <label for="goalName" class="form-label">Primary Goal</label>
+                                            <select class="form-select" id="goalName">
+                                                <option value="retirement" selected>Retirement</option>
+                                                <option value="house_downpayment">House Down Payment</option>
+                                                <option value="emergency_fund">Emergency Fund</option>
+                                                <option value="education">Education Fund</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="targetAmount" class="form-label">Target Amount ($)</label>
+                                            <input type="number" class="form-control" id="targetAmount" value="1000000" min="0">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="timeHorizon" class="form-label">Time Horizon (years)</label>
+                                            <input type="number" class="form-control" id="timeHorizon" value="25" min="1">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="planRiskTolerance" class="form-label">Risk Tolerance</label>
+                                            <select class="form-select" id="planRiskTolerance">
+                                                <option value="conservative">Conservative</option>
+                                                <option value="moderate" selected>Moderate</option>
+                                                <option value="aggressive">Aggressive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info">
+                                    <i class="fas fa-clipboard-list me-2"></i>Generate Action Plan
+                                </button>
+                            </form>
+                            <div id="actionResult" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// API Demo JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    // Financial Advice Form
+    document.getElementById('adviceForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const goals = [];
+        if (document.getElementById('retirement').checked) goals.push('retirement');
+        if (document.getElementById('house').checked) goals.push('house');
+        if (document.getElementById('education').checked) goals.push('education');
+
+        const data = {
+            age: parseInt(document.getElementById('age').value),
+            income: parseFloat(document.getElementById('income').value),
+            savings: parseFloat(document.getElementById('savings').value),
+            risk_tolerance: document.getElementById('riskTolerance').value,
+            investment_goals: goals,
+            investment_horizon: parseInt(document.getElementById('investmentHorizon').value)
+        };
+
+        await makeApiCall('/api/financial-advice', data, 'adviceResult', formatAdviceResponse);
+    });
+
+    // Sentiment Analysis Form
+    document.getElementById('sentimentForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const symbols = document.getElementById('symbols').value.split(',').map(s => s.trim().toUpperCase());
+        const sources = [];
+        if (document.getElementById('reuters').checked) sources.push('Reuters');
+        if (document.getElementById('bloomberg').checked) sources.push('Bloomberg');
+        if (document.getElementById('yahoo').checked) sources.push('Yahoo Finance');
+
+        const data = {
+            symbols: symbols,
+            news_sources: sources,
+            time_period: document.getElementById('timePeriod').value,
+            analysis_type: document.getElementById('analysisType').value
+        };
+
+        await makeApiCall('/api/sentiment-recommendations', data, 'sentimentResult', formatSentimentResponse);
+    });
+
+    // Action Plan Form
+    document.getElementById('actionForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const data = {
+            current_portfolio: {
+                stocks: parseFloat(document.getElementById('stocks').value),
+                bonds: parseFloat(document.getElementById('bonds').value),
+                cash: parseFloat(document.getElementById('cash').value)
+            },
+            financial_goals: [{
+                name: document.getElementById('goalName').value,
+                target_amount: parseFloat(document.getElementById('targetAmount').value),
+                time_horizon: parseInt(document.getElementById('timeHorizon').value)
+            }],
+            monthly_savings: parseFloat(document.getElementById('monthlySavings').value),
+            risk_tolerance: document.getElementById('planRiskTolerance').value
+        };
+
+        await makeApiCall('/api/action-plan', data, 'actionResult', formatActionResponse);
+    });
+});
+
+async function makeApiCall(endpoint, data, resultElementId, formatter) {
+    const resultElement = document.getElementById(resultElementId);
+    resultElement.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Processing...</div>';
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            resultElement.innerHTML = formatter(result);
+        } else {
+            resultElement.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle me-2"></i>Error: ${result.error || 'Unknown error occurred'}</div>`;
+        }
+    } catch (error) {
+        resultElement.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle me-2"></i>Network error: ${error.message}</div>`;
+    }
+}
+
+function formatAdviceResponse(result) {
+    const advice = result.advice;
+    return `
+        <div class="alert alert-success">
+            <h5><i class="fas fa-check-circle me-2"></i>${advice.title}</h5>
+            <p>${advice.description}</p>
+            <h6>Action Items:</h6>
+            <ul>
+                ${advice.action_items.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <strong>Projected Impact:</strong> $${advice.projected_impact.toLocaleString()}
+                </div>
+                <div class="col-md-6">
+                    <strong>Confidence:</strong> ${Math.round(advice.confidence_score * 100)}%
+                </div>
+            </div>
+            <small class="text-muted">Model: ${advice.model_used}</small>
+        </div>
+    `;
+}
+
+function formatSentimentResponse(result) {
+    const recommendations = result.recommendations;
+    return `
+        <div class="alert alert-info">
+            <h5><i class="fas fa-chart-bar me-2"></i>Sentiment Analysis Results</h5>
+            <p><strong>Overall Market Sentiment:</strong> ${result.analysis_summary.overall_sentiment}</p>
+            <div class="row">
+                ${recommendations.map(rec => `
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">${rec.symbol}</h6>
+                                <p class="card-text">
+                                    <span class="badge bg-${getSentimentColor(rec.sentiment)}">${rec.sentiment}</span>
+                                    <span class="badge bg-secondary">${rec.recommendation}</span>
+                                </p>
+                                <small class="text-muted">Confidence: ${Math.round(rec.confidence * 100)}%</small>
+                                <p class="mt-2"><small>${rec.reasoning}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <small class="text-muted">Model: ${result.model_used}</small>
+        </div>
+    `;
+}
+
+function formatActionResponse(result) {
+    const plan = result.action_plan;
+    return `
+        <div class="alert alert-primary">
+            <h5><i class="fas fa-tasks me-2"></i>Action Plan Generated</h5>
+            <p><strong>Timeline:</strong> ${plan.estimated_timeline}</p>
+            <p><strong>Priority Summary:</strong> ${plan.priority_summary}</p>
+            <h6>Action Items:</h6>
+            <div class="list-group">
+                ${plan.action_items.map(item => `
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">${item.title}</h6>
+                            <span class="badge bg-${getPriorityColor(item.priority)}">${item.priority}</span>
+                        </div>
+                        <p class="mb-1">${item.description}</p>
+                        <small>Timeline: ${item.timeline} | Category: ${item.category}</small>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="mt-3">
+                <strong>Total Estimated Cost:</strong> $${plan.total_estimated_cost.toLocaleString()}
+            </div>
+            <small class="text-muted">Model: ${result.model_used}</small>
+        </div>
+    `;
+}
+
+function getSentimentColor(sentiment) {
+    switch(sentiment.toLowerCase()) {
+        case 'positive': return 'success';
+        case 'negative': return 'danger';
+        default: return 'warning';
+    }
+}
+
+function getPriorityColor(priority) {
+    switch(priority.toLowerCase()) {
+        case 'high': return 'danger';
+        case 'medium': return 'warning';
+        default: return 'secondary';
+    }
+}
+</script>
+{% endblock %}
