@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/.venv
+WealthWise.AI/.vscode
+WealthWise.AI/venv
+WealthWise.AI/.env
