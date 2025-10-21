@@ -20,3 +20,20 @@ public enum AdviceCategory
     RetirementPlanning,
     TaxOptimization
 }
+
+public enum ActionPriority
+{
+    Low,
+    Medium,
+    High,
+    Urgent
+}
+
+public enum ConfidenceLevel
+{
+    VeryLow,
+    Low,
+    Medium,
+    High,
+    VeryHigh
+}

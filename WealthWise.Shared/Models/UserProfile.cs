@@ -40,5 +40,15 @@ public enum RiskToleranceLevel
 {
     Conservative,
     Moderate,
-    Aggressive
+    Aggressive,
+    VeryAggressive
+}
+
+public enum EmploymentStatus
+{
+    Employed,
+    SelfEmployed,
+    Unemployed,
+    Retired,
+    Student
 }

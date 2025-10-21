@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.API", "WealthWise.API\WealthWise.API.csproj", "{73BDF0AA-D828-F882-9818-32AF37D33F69}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.AppHost", "WealthWise.AppHost\WealthWise.AppHost.csproj", "{832D7A6F-9AE5-722D-DA1C-4E696FB246DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.ServiceDefaults", "WealthWise.ServiceDefaults\WealthWise.ServiceDefaults.csproj", "{603D609F-3DE5-0D1E-7402-B21548E2AFEE}"
@@ -12,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.Shared", "Wealth
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.UI", "WealthWise.UI\WealthWise.UI.csproj", "{0EC55A80-44E4-8597-D7CB-371310C0271C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WealthWise.AI", "WealthWise.AI\WealthWise.AI.pyproj", "{2b21aa4c-345d-4512-8fa0-168471a7a535}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "WealthWise.AI", "WealthWise.AI\WealthWise.AI.pyproj", "{1A4FE1DB-9E31-4B02-ABA3-D5AE2B8DFAA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +18,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{73BDF0AA-D828-F882-9818-32AF37D33F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73BDF0AA-D828-F882-9818-32AF37D33F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73BDF0AA-D828-F882-9818-32AF37D33F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73BDF0AA-D828-F882-9818-32AF37D33F69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{832D7A6F-9AE5-722D-DA1C-4E696FB246DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{832D7A6F-9AE5-722D-DA1C-4E696FB246DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{832D7A6F-9AE5-722D-DA1C-4E696FB246DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,10 +34,8 @@ Global
 		{0EC55A80-44E4-8597-D7CB-371310C0271C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EC55A80-44E4-8597-D7CB-371310C0271C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EC55A80-44E4-8597-D7CB-371310C0271C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2b21aa4c-345d-4512-8fa0-168471a7a535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2b21aa4c-345d-4512-8fa0-168471a7a535}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2b21aa4c-345d-4512-8fa0-168471a7a535}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2b21aa4c-345d-4512-8fa0-168471a7a535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A4FE1DB-9E31-4B02-ABA3-D5AE2B8DFAA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A4FE1DB-9E31-4B02-ABA3-D5AE2B8DFAA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,17 +2,16 @@
 Category 1: AI Financial Advisor API Routes
 Provides personalized financial advice, portfolio analysis, and risk assessment
 """
-
+#External imports
 from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from fastapi.responses import JSONResponse
 import logging
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict
 
-from pydantic_core import ValidationError
-
+# Internal imports
 from models.user_models import UserProfile, UserContext, CurrentPortfolio
-from models.response_models import FinancialAdviceResponse, APIResponse
+from models.response_models import FinancialAdviceResponse
 from services.fingpt_service import FinGPTService
 from middleware.auth_middleware import get_current_user
 from utils.validation import validate_user_profile, validate_portfolio

@@ -1,0 +1,426 @@
+﻿@page "/financial-advisor"
+@using System.Net.Http.Json
+@using System.Text.Json
+@using WealthWise.Shared.Models
+
+<PageTitle>AI Financial Advisor</PageTitle>
+
+<div class="financial-advisor-container">
+    <div class="header-section">
+        <h1 class="main-title">💰 AI Financial Advisor</h1>
+        <p class="subtitle">Get personalized financial advice powered by AI</p>
+    </div>
+
+    @if (!showResults)
+    {
+        <div class="form-container">
+            <EditForm Model="@request" OnValidSubmit="@GetAdvice" class="advice-form">
+                <div class="form-grid">
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">👤 Personal Information</h3>
+
+                        <div class="form-group">
+                            <label>User ID</label>
+                            <InputText @bind-Value="request.UserId" class="form-input" placeholder="Enter your ID" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Age</label>
+                            <InputNumber @bind-Value="request.Age" class="form-input" placeholder="25" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Location</label>
+                            <InputText @bind-Value="request.Location" class="form-input" placeholder="City, State" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Employment Status</label>
+                            <InputSelect @bind-Value="request.EmploymentStatus" class="form-input">
+                                @foreach (var status in Enum.GetValues(typeof(EmploymentStatus)))
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            </InputSelect>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Family Dependents</label>
+                            <InputNumber @bind-Value="request.FamilyDependents" class="form-input" />
+                        </div>
+                    </div>
+
+                    <!-- Financial Details -->
+                    <div class="form-section">
+                        <h3 class="section-title">💵 Financial Details</h3>
+
+                        <div class="form-group">
+                            <label>Annual Income (₹)</label>
+                            <InputNumber @bind-Value="request.AnnualIncome" class="form-input" placeholder="1000000" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Monthly Expenses (₹)</label>
+                            <InputNumber @bind-Value="request.MonthlyExpenses" class="form-input" placeholder="50000" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Current Savings (₹)</label>
+                            <InputNumber @bind-Value="request.CurrentSavings" class="form-input" placeholder="500000" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Current Investments (₹)</label>
+                            <InputNumber @bind-Value="request.CurrentInvestments" class="form-input" placeholder="100000" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Monthly Savings Capacity (₹)</label>
+                            <InputNumber @bind-Value="request.MonthlySavingsCapacity" class="form-input" placeholder="25000" />
+                        </div>
+                    </div>
+
+                    <!-- Investment Profile -->
+                    <div class="form-section">
+                        <h3 class="section-title">📊 Investment Profile</h3>
+
+                        <div class="form-group">
+                            <label>Risk Tolerance</label>
+                            <InputSelect @bind-Value="request.RiskTolerance" class="form-input">
+                                @foreach (var risk in Enum.GetValues(typeof(RiskToleranceLevel)))
+                                {
+                                    <option value="@risk">@risk</option>
+                                }
+                            </InputSelect>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Investment Experience (years)</label>
+                            <InputNumber @bind-Value="request.InvestmentExperience" class="form-input" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Short Term Horizon (years)</label>
+                            <InputNumber @bind-Value="request.ShortTermHorizon" class="form-input" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Medium Term Horizon (years)</label>
+                            <InputNumber @bind-Value="request.MediumTermHorizon" class="form-input" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Long Term Horizon (years)</label>
+                            <InputNumber @bind-Value="request.LongTermHorizon" class="form-input" />
+                        </div>
+                    </div>
+
+                    <!-- Additional Options -->
+                    <div class="form-section">
+                        <h3 class="section-title">⚙️ Additional Options</h3>
+
+                        <div class="form-group">
+                            <label>Total Debt (₹)</label>
+                            <InputNumber @bind-Value="request.TotalDebt" class="form-input" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Monthly Debt Payments (₹)</label>
+                            <InputNumber @bind-Value="request.MonthlyDebtPayments" class="form-input" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Retirement Contributions (₹)</label>
+                            <InputNumber @bind-Value="request.RetirementContributions" class="form-input" />
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <InputCheckbox @bind-Value="request.HasEmergencyFund" />
+                                Has Emergency Fund
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <InputCheckbox @bind-Value="request.EsgPreference" />
+                                ESG Preference
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <InputCheckbox @bind-Value="request.CryptoTolerance" />
+                                Crypto Tolerance
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="submit" class="btn-primary" disabled="@isLoading">
+                        @if (isLoading)
+                        {
+                            <span class="spinner"></span>
+                            <span>Analyzing...</span>
+                        }
+                        else
+                        {
+                            <span>🚀 Get AI Advice</span>
+                        }
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    }
+    else
+    {
+        <div class="results-container">
+            <div class="results-header">
+                <button @onclick="@(() => showResults = false)" class="btn-back">← New Analysis</button>
+                <div class="confidence-badge confidence-@response!.ConfidenceLevel.ToLower().Replace("_", "-")">
+                    Confidence: @response.ConfidenceLevel
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="card summary-card">
+                <h2 class="card-title">📋 Summary</h2>
+                <p class="summary-text">@response.AdviceSummary</p>
+                <div class="meta-info">
+                    <span>⏱️ Processed in @response.ProcessingTimeMs.ToString("F0")ms</span>
+                    <span>🤖 @response.ModelUsed</span>
+                </div>
+            </div>
+
+            <!-- Detailed Analysis -->
+            <div class="card">
+                <h2 class="card-title">🔍 Detailed Analysis</h2>
+                <p class="analysis-text">@response.DetailedAnalysis</p>
+            </div>
+
+            <!-- Action Items -->
+            <div class="card">
+                <h2 class="card-title">✅ Action Items</h2>
+                <div class="action-items-grid">
+                    @foreach (var item in response.ActionItems)
+                    {
+                        <div class="action-item priority-@item.Priority.ToString().ToLower()">
+                            <div class="action-header">
+                                <h4>@item.Title</h4>
+                                <span class="priority-badge">@item.Priority</span>
+                            </div>
+                            <p class="action-description">@item.Description</p>
+                            <div class="action-meta">
+                                <span class="category-tag">@item.Category</span>
+                                <span class="timeline-tag">⏰ @item.Timeline</span>
+                            </div>
+                            @if (!string.IsNullOrEmpty(item.EstimatedImpact))
+                            {
+                                <div class="impact-badge">💰 @item.EstimatedImpact</div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Risk Assessment -->
+            <div class="card">
+                <h2 class="card-title">⚠️ Risk Assessment</h2>
+                <div class="risk-level risk-@response.RiskAssessment.OverallRiskLevel.ToLower()">
+                    Overall Risk: @response.RiskAssessment.OverallRiskLevel
+                </div>
+
+                <div class="risk-section">
+                    <h4>Risk Factors:</h4>
+                    <ul>
+                        @foreach (var factor in response.RiskAssessment.RiskFactors)
+                        {
+                            <li>@factor</li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="risk-section">
+                    <h4>Mitigation Strategies:</h4>
+                    <ul>
+                        @foreach (var strategy in response.RiskAssessment.MitigationStrategies)
+                        {
+                            <li>@strategy</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Portfolio Analysis -->
+            @if (response.PortfolioAnalysis != null)
+            {
+                <div class="card">
+                    <h2 class="card-title">📊 Portfolio Analysis</h2>
+                    <div class="portfolio-grid">
+                        <div class="allocation-section">
+                            <h4>Current Allocation</h4>
+                            @foreach (var item in response.PortfolioAnalysis.CurrentAllocation)
+                            {
+                                <div class="allocation-item">
+                                    <span>@item.Key</span>
+                                    <span class="percentage">@item.Value%</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="allocation-section">
+                            <h4>Recommended Allocation</h4>
+                            @foreach (var item in response.PortfolioAnalysis.RecommendedAllocation)
+                            {
+                                <div class="allocation-item">
+                                    <span>@item.Key</span>
+                                    <span class="percentage">@item.Value%</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="diversification-score">
+                        Diversification Score: @response.PortfolioAnalysis.DiversificationScore/100
+                    </div>
+                </div>
+            }
+
+            <!-- Projections -->
+            @if (response.ProjectedNetWorth != null)
+            {
+                <div class="card">
+                    <h2 class="card-title">📈 Financial Projections</h2>
+                    <div class="projections-grid">
+                        <div>
+                            <h4>Net Worth</h4>
+                            @foreach (var proj in response.ProjectedNetWorth.OrderBy(p => p.Key))
+                            {
+                                <div class="projection-item">
+                                    <span>@proj.Key</span>
+                                    <span class="amount">₹@proj.Value.ToString("N0")</span>
+                                </div>
+                            }
+                        </div>
+                        @if (response.SavingsProjections != null)
+                        {
+                            <div>
+                                <h4>Savings</h4>
+                                @foreach (var proj in response.SavingsProjections.OrderBy(p => p.Key))
+                                {
+                                    <div class="projection-item">
+                                        <span>@proj.Key</span>
+                                        <span class="amount">₹@proj.Value.ToString("N0")</span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Retirement Readiness -->
+            @if (response.RetirementReadiness != null)
+            {
+                <div class="card">
+                    <h2 class="card-title">🏖️ Retirement Readiness</h2>
+                    <div class="retirement-score">
+                        Score: @response.RetirementReadiness.CurrentRetirementScore/100
+                    </div>
+                    <p><strong>Target Age:</strong> @response.RetirementReadiness.TargetRetirementAge</p>
+                    <p><strong>Projected Corpus:</strong> ₹@response.RetirementReadiness.ProjectedRetirementCorpus.ToString("N0")</p>
+                    <p><strong>Monthly Income:</strong> ₹@response.RetirementReadiness.MonthlyRetirementIncome.ToString("N0")</p>
+                    @if (!string.IsNullOrEmpty(response.RetirementReadiness.GapAnalysis))
+                    {
+                        <p class="gap-analysis">@response.RetirementReadiness.GapAnalysis</p>
+                    }
+                </div>
+            }
+
+            <!-- Resources -->
+            <div class="card">
+                <h2 class="card-title">📚 Additional Resources</h2>
+                <ul class="resources-list">
+                    @foreach (var resource in response.AdditionalResources)
+                    {
+                        <li><a href="@resource" target="_blank">@resource</a></li>
+                    }
+                </ul>
+            </div>
+
+            <div class="follow-up-banner">
+                <strong>📅 Follow-up:</strong> @response.FollowUpTimeline
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private FinancialAdvisorRequest request = new()
+    {
+        UserId = "demo_user_" + Guid.NewGuid().ToString().Substring(0, 8),
+        Age = 25,
+        EmploymentStatus = EmploymentStatus.Employed,
+        AnnualIncome = 1000000,
+        MonthlyExpenses = 5000,
+        CurrentSavings = 500000,
+        MonthlySavingsCapacity = 25000,
+        RiskTolerance = RiskToleranceLevel.Moderate,
+        HasEmergencyFund = true
+    };
+
+    private FinancialAdvisorResponse? response;
+    private bool isLoading = false;
+    private bool showResults = false;
+    private readonly HttpClient _httpClient = new();
+
+    protected override void OnInitialized()
+    {
+        _httpClient.BaseAddress = new Uri("http://localhost:8000"); // API URL
+    }
+
+    private async Task<string> GetAuthToken()
+    {
+        var user = new TokenRequest();
+        var requestJson = JsonSerializer.Serialize(user);
+        var requestContent = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
+        var apiResponse = await _httpClient.PostAsync("/token", requestContent);
+        if (apiResponse.IsSuccessStatusCode)
+        {
+            var token = await apiResponse.Content.ReadFromJsonAsync<TokenResponse>();
+            return token!.AccessToken;
+            
+        }
+        return "";
+    }
+
+    private async Task GetAdvice()
+    {
+        isLoading = true;
+        try
+        {
+            var token = await GetAuthToken();
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var requestJson = JsonSerializer.Serialize(request);
+            var requestContent = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
+            var apiResponse = await _httpClient.PostAsync("/api/v1/advisor/personal-advice", requestContent);
+
+            if (apiResponse.IsSuccessStatusCode)
+            {
+                response = await apiResponse.Content.ReadFromJsonAsync<FinancialAdvisorResponse>();
+                showResults = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

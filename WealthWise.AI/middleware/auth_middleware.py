@@ -8,11 +8,17 @@ from jose import jwt
 import logging
 from typing import Dict, Optional
 from datetime import datetime, timedelta
+from pydantic import BaseModel
 
 from config.settings import settings
 
 logger = logging.getLogger(__name__)
 security = HTTPBearer()
+
+class AuthToken(BaseModel):
+    access_token: str
+    token_type: str
+    expires_on: datetime
 
 class AuthManager:
     """Manages authentication and authorization"""
@@ -20,9 +26,9 @@ class AuthManager:
     def __init__(self):
         self.secret_key = settings.secret_key
         self.algorithm = "HS256"
-        self.access_token_expire_minutes = 60 * 24  # 24 hours
+        self.access_token_expire_minutes = 60 * 10  # 10 hours
 
-    def create_access_token(self, user_id: str, additional_data: Optional[Dict] = None) -> str:
+    def create_access_token(self, user_id: str, additional_data: Optional[Dict] = None) -> AuthToken:
         """Create JWT access token"""
         try:
             expire = datetime.utcnow() + timedelta(minutes=self.access_token_expire_minutes)
@@ -38,7 +44,7 @@ class AuthManager:
                 payload.update(additional_data)
 
             token = jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
-            return token
+            return AuthToken(access_token=token, token_type="bearer", expires_on= expire)
 
         except Exception as e:
             logger.error(f"Error creating access token: {e}")

@@ -1,0 +1,110 @@
+﻿@page "/financial-chat"
+@using WealthWise.UI.Services
+
+@* @inject AiChatService ChatService // Need to fix the issue *@
+
+<div class="card">
+    <div class="header-section">
+        <h1 class="main-title">🤖 AI Financial Assistant</h1>
+    </div>
+    <div class="chat-container">
+        @foreach (var msg in messages)
+        {
+            <div class="chat-message @(msg.Role)">
+                <div class="bubble">
+                    @foreach (var line in msg.Content.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        <p>@line</p>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (isTyping)
+        {
+            <div class="chat-message assistant">
+                <div class="bubble typing">...</div>
+            </div>
+        }
+    </div>
+
+    <div class="chat-input">
+        <input @bind="userInput" placeholder="Type your message..." @onkeydown="@OnKeyDown" />
+        <button @onclick="SendMessage">Send</button>
+    </div>
+
+</div>
+
+@code {
+    private List<ChatMessage> messages = new()
+    {
+        new ChatMessage("assistant", "Hello! I'm your Financial Assistent. How can I help you today?")
+    };
+
+    private string userInput = "";
+    private bool isTyping = false;
+    private readonly HttpClient _httpClient = new();
+
+    protected override void OnInitialized()
+    {
+        _httpClient.BaseAddress = new Uri("http://localhost:8000"); // API URL
+    }
+
+    private async Task SendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(userInput)) return;
+
+        var userMsg = new ChatMessage("user", userInput);
+        messages.Add(userMsg);
+
+        var input = userInput;
+        userInput = "";
+        isTyping = true;
+
+        StateHasChanged();
+
+        try
+        {
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"/financial/chat?message=\"{userMsg.Content}\"");
+            var apiResponse = await _httpClient.SendAsync(httpRequest);
+
+            if (apiResponse.IsSuccessStatusCode)
+            {
+                var reply = await apiResponse.Content.ReadAsStringAsync();
+                messages.Add(new ChatMessage("assistant", reply));
+            }
+            else
+            {
+                messages.Add(new ChatMessage("assistant", "⚠️ Error: Unable to get response from the server."));
+            }
+        }
+        catch (Exception ex)
+        {
+            messages.Add(new ChatMessage("assistant", $"⚠️ Error: {ex.Message}"));
+        }
+        finally
+        {
+            isTyping = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SendMessage();
+        }
+    }
+
+    public class ChatMessage
+    {
+        public string Role { get; set; } // "user" or "assistant"
+        public string Content { get; set; }
+        public ChatMessage(string role, string content)
+        {
+            Role = role;
+            Content = content;
+        }
+    }
+}

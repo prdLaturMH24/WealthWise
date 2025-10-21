@@ -18,6 +18,5 @@ public enum InvestmentType
     RealEstate,
     Cryptocurrency,
     BankDeposits,
-    RecurringDeposits,
     Other
 }

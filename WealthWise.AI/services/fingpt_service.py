@@ -294,9 +294,6 @@ class FinGPTService:
     async def generate_personal_advice(self, user_context) -> Any:
         """Generate personalized financial advice using FinGPT advisor model"""
         try:
-            from models.response_models import (
-                FinancialAdviceResponse, ConfidenceLevel, ActionItem, RiskAssessment, ActionPriority
-            )
             
             profile = user_context.profile
             

@@ -5,49 +5,49 @@ These models define the structure for user data, preferences, and goals
 that will be used across all three API categories.
 """
 
-from pydantic import BaseModel, Field, validator
-from typing import List, Optional, Dict, Union
+from pydantic import BaseModel, Field
+from typing import List, Optional, Dict
 from datetime import datetime, date
 from enum import Enum
 
 class RiskTolerance(str, Enum):
     """Risk tolerance levels"""
-    CONSERVATIVE = "conservative"
-    MODERATE = "moderate"
-    AGGRESSIVE = "aggressive"
-    VERY_AGGRESSIVE = "very_aggressive"
+    Conservative = "Conservative"
+    Moderate = "Moderate"
+    Aggressive = "Aggressive"
+    VeryAggressive = "VeryAggressive"
 
 class InvestmentGoalType(str, Enum):
     """Types of investment goals"""
-    RETIREMENT = "retirement"
-    HOME_PURCHASE = "home_purchase"
-    EDUCATION = "education"
-    EMERGENCY_FUND = "emergency_fund"
-    WEALTH_BUILDING = "wealth_building"
-    DEBT_PAYOFF = "debt_payoff"
-    TRAVEL = "travel"
-    OTHER = "other"
+    RETIREMENT = "Retirement"
+    HOME_PURCHASE = "HomePurchase"
+    EDUCATION = "Education"
+    EMERGENCY_FUND = "EmergencyFund"
+    WEALTH_BUILDING = "WealthBuilding"
+    DEBT_PAYOFF = "DebtPayoff"
+    TRAVEL = "Travel"
+    OTHER = "Other"
 
 class EmploymentStatus(str, Enum):
     """Employment status options"""
-    EMPLOYED = "employed"
-    SELF_EMPLOYED = "self_employed"
-    UNEMPLOYED = "unemployed"
-    RETIRED = "retired"
-    STUDENT = "student"
+    Employed = "Employed"
+    SelfEmployed = "SelfEmployed"
+    Unemployed = "Unemployed"
+    Retired = "Retired"
+    Student = "Student"
 
 class MarketSector(str, Enum):
     """Market sectors for recommendations"""
-    TECHNOLOGY = "technology"
-    HEALTHCARE = "healthcare"
-    FINANCE = "finance"
-    ENERGY = "energy"
-    CONSUMER_GOODS = "consumer_goods"
-    REAL_ESTATE = "real_estate"
-    UTILITIES = "utilities"
-    MATERIALS = "materials"
-    INDUSTRIALS = "industrials"
-    TELECOMMUNICATIONS = "telecommunications"
+    TECHNOLOGY = "Technology"
+    HEALTHCARE = "Healthcare"
+    FINANCE = "Finance"
+    ENERGY = "Energy"
+    CONSUMER_GOODS = "ConsumerGoods"
+    REAL_ESTATE = "RealEstate"
+    UTILITIES = "Utilities"
+    MATERIALS = "Materials"
+    INDUSTRIALS = "Industrials"
+    TELECOMMUNICATIONS = "Telecommunications"
 
 class UserProfile(BaseModel):
     """Comprehensive user profile for financial AI services"""
@@ -59,8 +59,8 @@ class UserProfile(BaseModel):
     employment_status: EmploymentStatus = Field(..., description="Current employment status")
 
     # Financial Information
-    annual_income: float = Field(..., ge=0, description="Annual income in USD")
-    monthly_expenses: float = Field(..., ge=0, description="Monthly expenses in USD")
+    annual_income: float = Field(..., ge=0, description="Annual income in INR")
+    monthly_expenses: float = Field(..., ge=0, description="Monthly expenses in INR")
     current_savings: float = Field(..., ge=0, description="Current total savings")
     current_investments: float = Field(default=0, ge=0, description="Current investment portfolio value")
     monthly_savings_capacity: float = Field(..., ge=0, description="Amount available for savings/investment monthly")
@@ -75,8 +75,8 @@ class UserProfile(BaseModel):
     preferred_sectors: List[MarketSector] = Field(default=[], description="Preferred market sectors")
 
     # Time Horizons
-    short_term_horizon: Optional[int] = Field(None, ge=1, le=10, description="Short-term investment horizon in years")
-    medium_term_horizon: Optional[int] = Field(None, ge=5, le=20, description="Medium-term investment horizon in years")
+    short_term_horizon: Optional[int] = Field(None, ge=1, le=5, description="Short-term investment horizon in years")
+    medium_term_horizon: Optional[int] = Field(None, ge=5, le=10, description="Medium-term investment horizon in years")
     long_term_horizon: Optional[int] = Field(None, ge=10, le=50, description="Long-term investment horizon in years")
 
     # Additional Context
@@ -116,8 +116,8 @@ class MarketPreferences(BaseModel):
     """Market analysis and recommendation preferences"""
 
     # Geographic Preferences
-    focus_regions: List[str] = Field(default=["US"], description="Geographic regions of interest")
-    currency_preference: str = Field(default="USD", description="Preferred currency for analysis")
+    focus_regions: List[str] = Field(default=["IND"], description="Geographic regions of interest")
+    currency_preference: str = Field(default="INR", description="Preferred currency for analysis")
 
     # Market Data Preferences
     analysis_timeframe: str = Field(default="1Y", description="Preferred analysis timeframe")

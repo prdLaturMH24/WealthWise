@@ -14,8 +14,4 @@
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WealthWise.API\WealthWise.API.csproj" />
-  </ItemGroup>
-
 </Project>

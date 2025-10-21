@@ -1,14 +1,14 @@
-from typing import Annotated
-from fastapi import APIRouter, Body, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 from middleware.auth_middleware import auth_manager, get_user_by_id
+from datetime import datetime
 
 router = APIRouter()
 
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
+    expires_on: datetime
 
 class TokenRequest(BaseModel):
     username: str
@@ -28,5 +28,5 @@ async def login_for_access_token(form_data: TokenRequest) -> TokenResponse:
             detail="Incorrect username or password",
         )
 
-    access_token = auth_manager.create_access_token(user_id=user["user_id"])
-    return TokenResponse(access_token=access_token, token_type="bearer")
+    auth_token = auth_manager.create_access_token(user_id=user["user_id"])
+    return TokenResponse(access_token=auth_token.access_token, token_type="bearer", expires_on=auth_token.expires_on)

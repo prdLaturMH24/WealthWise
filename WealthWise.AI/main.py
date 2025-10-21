@@ -1,39 +1,30 @@
 """
 FinGPT-Powered Financial AI Services API
-FastAPI Application with Three Main Categories
+FastAPI Application with Four Main Categories
 
 1. AI Financial Advisor - Personalized financial advice based on user profiles
 2. AI Recommendations - Non-advisory recommendations (market insights, news analysis, etc.)
 3. AI Finance Goal Planner - Goal-based financial planning and strategy
-
+4. AI Finance Chatbot - Interactive financial chatbot for user queries
 Built with FastAPI and powered by FinGPT models from AI4Finance Foundation
 """
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
 from huggingface_hub import login, InferenceClient
-from json_repair import repair_json
 import uvicorn
 import logging
 from datetime import datetime, timezone
-from typing import List, Dict, Optional
-import os
-import json
+from typing import Dict
 from contextlib import asynccontextmanager
-import asyncio
-from pydantic import ValidationError
-from models.response_models import FinancialAdviceResponse
-import re
-import json
+
 
 # Import configuration
 from config.settings import settings
 
 # Import services
 from services.fingpt_service import FinGPTService
-from services.market_data_service import MarketDataService
 
 # Import middleware
 from utils.logging_config import setup_logging, RequestLogger
@@ -44,93 +35,6 @@ from api.v1.advisor import router as advisor_router
 from api.v1.recommendations import router as recommendations_router
 from api.v1.planner import router as planner_router
 from api.v1.auth import router as auth_router
-
-def clean_json_string(raw_text: str) -> str:
-    """
-    Cleans a malformed JSON string by removing markdown code fences,
-    language identifiers, trailing commas, and other impurities.
-    Returns a valid JSON string ready for parsing.
-    
-    Args:
-        raw_text: Raw string that may contain JSON with impurities
-        
-    Returns:
-        Clean JSON string
-        
-    Raises:
-        ValueError: If input is invalid or cannot be cleaned to valid JSON
-    """
-    
-    if not isinstance(raw_text, str) or not raw_text.strip():
-        raise ValueError("Input must be a non-empty string")
-    
-    cleaned = raw_text.strip()
-
-    # Step 1: Unescape the string if it contains literal \n characters
-    # This handles cases where JSON is double-encoded
-    if '\n' in cleaned:
-        # Replace escaped newlines with actual newlines
-        cleaned = cleaned.replace('\n', '')
-        # Replace escaped quotes
-        cleaned = cleaned.replace('\"', '"')
-        # Replace escaped backslashes
-        cleaned = cleaned.replace('\\\\', '\\')
-        
-    # Step 2: Remove markdown code fences
-    # Remove opening fence like ```json or ```
-    cleaned = re.sub(r'```[a-zA-Z]*\s*', '', cleaned, count=1)
-    # Remove closing fence ```
-    cleaned = re.sub(r'\s*```\s*$', '', cleaned)
-    
-    # Step 2: Remove invisible Unicode characters
-    cleaned = cleaned.replace('\ufeff', '')  # BOM
-    cleaned = cleaned.replace('\u200b', '')  # Zero-width space
-    cleaned = cleaned.replace('\x00', '')    # Null character
-    cleaned = cleaned.replace('\u2028', '')  # Line separator
-    
-    # Step 3: Find JSON object/array boundaries
-    json_match = re.search(r'(\{.*\}|$$.*$$)', cleaned, re.DOTALL)
-    if json_match:
-        cleaned = json_match.group(1)
-    
-    cleaned = cleaned.strip()
-    
-    # Step 4: Fix common JSON errors - trailing commas
-    # Remove trailing commas before closing braces/brackets
-    cleaned = re.sub(r',(\s*[}\]])', r'\1', cleaned)
-    
-    # Fix missing commas between properties (common LLM error)
-    # Add comma between }" and "key if missing
-    cleaned = re.sub(r'"\s*\n\s*"', '",\n"', cleaned)
-    
-    # Fix missing commas after numbers/booleans before next key
-    cleaned = re.sub(r'(\d|true|false|null)\s*\n\s*"', r'\1,\n"', cleaned)
-    
-    # Remove duplicate commas
-    cleaned = re.sub(r',\s*,', ',', cleaned)
-    
-    # Step 5: Try to parse - if it fails, show where the error is
-    try:
-        cleaned = repair_json(cleaned)
-        return json.loads(cleaned)
-    except json.JSONDecodeError as e:
-        # Print debug info to help locate the issue
-        lines = cleaned.split('\n')
-        error_line = e.lineno - 1 if e.lineno else 0
-        
-        print(f"JSON Error at line {e.lineno}, column {e.colno}")
-        print(f"Error message: {e.msg}")
-        
-        # Show context around the error
-        start = max(0, error_line - 2)
-        end = min(len(lines), error_line + 3)
-        
-        print("\nContext around error:")
-        for i in range(start, end):
-            marker = " >>> " if i == error_line else "     "
-            print(f"{marker}Line {i+1}: {lines[i]}")
-        
-        raise ValueError(f"Could not parse as valid JSON: {e}")
 
 # Global services - these will be available to all route modules
 fingpt_service = None
@@ -539,6 +443,7 @@ async def root():
     </html>
     """
 
+# Financial chat endpoint
 @app.post("/financial/chat")
 async def chat_endpoint(message: str):
     """Simple chat endpoint for testing"""
@@ -546,9 +451,6 @@ async def chat_endpoint(message: str):
         if not message or message.strip() == "":
             raise HTTPException(status_code=400, detail="Message cannot be empty")
         
-        prompt: str = message + "Financial Advice Output should be in plain json format matching the following json schema: " 
-        prompt += r"""{"$schema":"http://json-schema.org/draft-07/schema#","title":"FinancialAdviceResponse","description":"Response for personal financial advice requests","type":"object","properties":{"advice_summary":{"type":"string","description":"Executive summary of advice"},"detailed_analysis":{"type":"string","description":"Detailed financial analysis"},"action_items":{"type":"array","description":"Recommended action items","items":{"$ref":"#/definitions/ActionItem"}},"risk_assessment":{"$ref":"#/definitions/RiskAssessment","description":"Risk analysis and recommendations"},"portfolio_analysis":{"anyOf":[{"$ref":"#/definitions/PortfolioAnalysis"},{"type":"null"}],"description":"Portfolio analysis if applicable"},"confidence_level":{"$ref":"#/definitions/ConfidenceLevel","description":"AI confidence in recommendations"},"follow_up_timeline":{"type":"string","description":"When to reassess or follow up"},"additional_resources":{"type":"array","description":"Educational resources and tools","items":{"type":"string"},"default":[]},"projected_net_worth":{"anyOf":[{"type":"object","additionalProperties":{"type":"number"}},{"type":"null"}],"description":"Net worth projections over time"},"savings_projections":{"anyOf":[{"type":"object","additionalProperties":{"type":"number"}},{"type":"null"}],"description":"Savings growth projections"},"retirement_readiness":{"anyOf":[{"type":"object","additionalProperties":true},{"type":"null"}],"description":"Retirement readiness assessment"}},"required":["advice_summary","detailed_analysis","action_items","risk_assessment","confidence_level","follow_up_timeline"],"definitions":{"ActionItem":{"type":"object","description":"Represents an actionable financial recommendation"},"RiskAssessment":{"type":"object","description":"Represents risk analysis and related insights"},"PortfolioAnalysis":{"type":"object","description":"Represents a breakdown of portfolio performance and allocation"},"ConfidenceLevel":{"type":"object","description":"Describes model confidence and reliability metrics"}}}"""
-
         client = InferenceClient(
         provider="publicai",
         api_key=settings.huggingface_token,
@@ -558,11 +460,11 @@ async def chat_endpoint(message: str):
             messages=[
                 {
                     "role": "system",
-                    "content": "I am a professional financial advisor trained on Financial Data"
+                    "content": "I am a professional financial assistent trained on Financial Data and response only on Finanacial chat"
                 },
                 {
                     "role": "user",
-                    "content": prompt
+                    "content": message.strip()
                 }
             ],
         )
@@ -571,8 +473,7 @@ async def chat_endpoint(message: str):
         if completion is None or content is None:
             raise HTTPException(status_code=500, detail="No response from AI model")
         
-        cleaned = clean_json_string(content)
-        return cleaned
+        return content
 
     except Exception as e:
         logger.error("Error ocuured while getting chat response: %s", e)
