@@ -159,6 +159,8 @@ CRITICAL INSTRUCTIONS:
 - Output ONLY the JSON object above with actual data
 - Do NOT include schema definitions or "$schema" fields
 - Do NOT wrap in markdown code blocks
+- Do NOT use any static values from the example json payload except enums below:
+    - overall_risk_level, category, priority
 - Do NOT include these fields (they will be added automatically):
   - success, timestamp, request_id, processing_time_ms,model_used
 - All monetary values in Indian Rupees (₹)

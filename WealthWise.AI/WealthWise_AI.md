@@ -4,7 +4,7 @@
 fingpt-financial-ai-services/
 ├── main.py 
 ├── requirements.txt 
-├── .env.template 
+├── .env
 ├── README.md 
 │
 ├── api/
