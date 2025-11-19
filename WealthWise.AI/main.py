@@ -446,7 +446,6 @@ async def root():
 # Financial chat endpoint
 @app.post("/financial/chat")
 async def chat_endpoint(message: str):
-    """Simple chat endpoint for testing"""
     try:
         if not message or message.strip() == "":
             raise HTTPException(status_code=400, detail="Message cannot be empty")
@@ -456,7 +455,7 @@ async def chat_endpoint(message: str):
         api_key=settings.huggingface_token,
         )
         completion = client.chat.completions.create(
-            model="swiss-ai/Apertus-8B-Instruct-2509",
+            model="swiss-ai/Apertus-70B-Instruct-2509",
             messages=[
                 {
                     "role": "system",
@@ -473,7 +472,8 @@ async def chat_endpoint(message: str):
         if completion is None or content is None:
             raise HTTPException(status_code=500, detail="No response from AI model")
         
-        return content
+        # Return content as JSON so clients receive application/json
+        return JSONResponse(content=content)
 
     except Exception as e:
         logger.error("Error ocuured while getting chat response: %s", e)
