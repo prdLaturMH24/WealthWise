@@ -1,7 +1,10 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href=""><img class="logo" style="height:50px; width:50px;" src="./WealthWiseLogo1.png" alt="Alternate Text" /></a> 
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+    <div class="container-fluid d-flex align-items-center">
+        <a class="navbar-brand d-flex align-items-center" href="">
+            <img class="logo" src="./WealthWiseLogo1.png" alt="WealthWise logo" />
+            <span class="brand-text">WealthWise-AI</span>
+        </a>
+        <button title="Navigation menu" class="navbar-toggler ms-auto" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
@@ -19,11 +22,11 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Financial Advisor
             </NavLink>
         </div>
-        <div class="nav-item px-3">
+        @* <div class="nav-item px-3">
             <NavLink class="nav-link" href="portfolio">
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Portfolio Overview
             </NavLink>
-        </div>
+        </div> *@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="financial-chat">
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Financial Chat

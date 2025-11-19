@@ -3,34 +3,37 @@
 
 @* @inject AiChatService ChatService // Need to fix the issue *@
 
-<div class="card">
+<div class="card chat-fullwidth">
     <div class="header-section">
         <h1 class="main-title">🤖 AI Financial Assistant</h1>
     </div>
-    <div class="chat-container">
-        @foreach (var msg in messages)
-        {
-            <div class="chat-message @(msg.Role)">
-                <div class="bubble">
-                    @foreach (var line in msg.Content.Split('\n', StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        <p>@line</p>
-                    }
+
+    <div class="chat-inner">
+        <div class="chat-container">
+            @foreach (var msg in messages)
+            {
+                <div class="chat-message @(msg.Role)">
+                    <div class="bubble">
+                        @foreach (var line in msg.Content.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <p>@line</p>
+                        }
+                    </div>
                 </div>
-            </div>
-        }
+            }
 
-        @if (isTyping)
-        {
-            <div class="chat-message assistant">
-                <div class="bubble typing">...</div>
-            </div>
-        }
-    </div>
+            @if (isTyping)
+            {
+                <div class="chat-message assistant">
+                    <div class="bubble typing">...</div>
+                </div>
+            }
+        </div>
 
-    <div class="chat-input">
-        <input @bind="userInput" placeholder="Type your message..." @onkeydown="@OnKeyDown" />
-        <button @onclick="SendMessage">Send</button>
+        <div class="chat-input">
+            <input @bind="userInput" placeholder="Type your message..." @onkeydown="@OnKeyDown" />
+            <button @onclick="SendMessage">Send</button>
+        </div>
     </div>
 
 </div>
