@@ -306,6 +306,7 @@ code {
 /* AI chat styling */
 
 .chat-container {
+    width: 100%;
     max-width: 700px;
     margin: 20px auto;
     background: #f7f7f7;
