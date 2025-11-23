@@ -1,5 +1,10 @@
 ﻿@page "/financial-chat"
 @using WealthWise.UI.Services
+@using System.Net
+@using System.Text
+@using System.Text.Json
+@using System.Text.RegularExpressions
+@using Microsoft.AspNetCore.Components
 
 @* @inject AiChatService ChatService // Need to fix the issue *@
 
@@ -11,12 +16,7 @@
         @foreach (var msg in messages)
         {
             <div class="chat-message @(msg.Role)">
-                <div class="bubble">
-                    @foreach (var line in msg.Content.Split('\n', StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        <p>@line</p>
-                    }
-                </div>
+                <div class="bubble">@((MarkupString)FormatMessageContent(msg.Content))</div>
             </div>
         }
 
@@ -65,12 +65,16 @@
 
         try
         {
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"/financial/chat?message=\"{userMsg.Content}\"");
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"/financial/chat?message={Uri.EscapeDataString(input)}");
             var apiResponse = await _httpClient.SendAsync(httpRequest);
 
             if (apiResponse.IsSuccessStatusCode)
             {
-                var reply = await apiResponse.Content.ReadAsStringAsync();
+                var raw = await apiResponse.Content.ReadAsStringAsync();
+
+                // Normalize and unescape if API returned an escaped JSON string
+                var reply = NormalizeApiResponse(raw);
+
                 messages.Add(new ChatMessage("assistant", reply));
             }
             else
@@ -95,6 +99,77 @@
         {
             await SendMessage();
         }
+    }
+
+    // Convert API response into a plain string with real newlines
+    private string NormalizeApiResponse(string raw)
+    {
+        if (string.IsNullOrEmpty(raw))
+            return string.Empty;
+
+        // If the API returned a JSON string (with surrounding quotes and escaped newlines), try to deserialize first
+        try
+        {
+            // This will turn "Hello\nWorld" -> Hello\nWorld (real newline characters)
+            var deserialized = JsonSerializer.Deserialize<string>(raw);
+            if (!string.IsNullOrEmpty(deserialized))
+                return deserialized;
+        }
+        catch
+        {
+            // ignore deserialization errors and try fallbacks
+        }
+
+        // If the response still contains escaped sequences like \n, unescape them
+        if (raw.Contains("\\n") || raw.Contains("\\r"))
+        {
+            try
+            {
+                var unescaped = Regex.Unescape(raw);
+                return unescaped;
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+
+        // Strip surrounding quotes if present
+        if ((raw.StartsWith("\"") && raw.EndsWith("\"")) || (raw.StartsWith("'") && raw.EndsWith("'")))
+        {
+            return raw.Substring(1, raw.Length - 2).Replace("\\r\\n", "\n").Replace("\\n", "\n");
+        }
+
+        return raw;
+    }
+
+    // Produce safe HTML with <p> per paragraph (split by double newlines) and <br/> inside paragraphs
+    private MarkupString FormatMessageContent(string content)
+    {
+        if (string.IsNullOrEmpty(content))
+            return (MarkupString)string.Empty;
+
+        // Normalize CRLF to \n
+        var normalized = content.Replace("\r\n", "\n").Replace("\r", "\n");
+
+        // Split into paragraphs on double newlines (keep empty paragraphs if there are multiple)
+        var paragraphs = normalized.Split(new string[] { "\n\n" }, StringSplitOptions.None);
+
+        var sb = new StringBuilder();
+        foreach (var para in paragraphs)
+        {
+            // HTML-encode paragraph content to avoid XSS
+            var encoded = WebUtility.HtmlEncode(para ?? string.Empty);
+
+            // Replace remaining single newlines inside paragraph with <br/>
+            encoded = encoded.Replace("\n", "<br/>");
+
+            sb.Append("<p>");
+            sb.Append(encoded);
+            sb.Append("</p>");
+        }
+
+        return (MarkupString)sb.ToString();
     }
 
     public class ChatMessage
